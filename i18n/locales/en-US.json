@@ -6,11 +6,14 @@
     "Prose": "Network Request",
     "Unocss": "Unocss Example",
     "Keepalive": "KeepAlive Demo",
+    "Discovery": "Discovery",
+    "Login": "Login",
     "Undefined": "Undefined title"
   },
 
   "tabbar": {
     "home": "Home",
+    "discovery": "Discovery",
     "profile": "Profile"
   },
 

@@ -47,5 +47,8 @@
     "json",
     "jsonc",
     "yaml"
+  ],
+  "cSpell.words": [
+    "hibackend"
   ]
 }

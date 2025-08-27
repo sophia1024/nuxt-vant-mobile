@@ -20,6 +20,12 @@ const show = computed(() => {
         <div class="i-carbon:home" />
       </template>
     </van-tabbar-item>
+    <van-tabbar-item replace to="/discovery">
+      <span>{{ $t('tabbar.discovery') }}</span>
+      <template #icon>
+        <div class="i-carbon:location" />
+      </template>
+    </van-tabbar-item>
     <van-tabbar-item replace to="/profile">
       <span>{{ $t('tabbar.profile') }}</span>
       <template #icon>

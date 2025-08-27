@@ -3,6 +3,47 @@ import { appDescription } from './app/constants/index'
 import preload from './app/utils/preload'
 import { currentLocales } from './i18n/i18n'
 
+// 获取环境代理配置
+function getProxyConfig() {
+  const env = process.env.NODE_ENV
+  const isMock = process.env.NUXT_MOCK_ENABLED === 'true'
+
+  // Mock模式不需要代理，直接使用本地server API
+  if (isMock) {
+    return ''
+  }
+
+  // 测试环境代理配置
+  if (env === 'test') {
+    return {
+      '/api': {
+        target: 'https://m.hismk.club/api',
+        changeOrigin: true,
+        pathRewrite: { '^/api/': '' },
+      },
+      '/obs': {
+        target: 'https://m.hismk.club/obs',
+        changeOrigin: true,
+        pathRewrite: { '^/obs/': '' },
+      },
+    } as Record<string, any>
+  }
+
+  // 开发环境代理配置
+  return {
+    '/api': {
+      target: 'http://192.168.232.180:51000/api',
+      changeOrigin: true,
+      pathRewrite: { '^/api/': '' },
+    },
+    '/md': {
+      target: 'http://192.168.232.180:51000/md',
+      changeOrigin: true,
+      pathRewrite: { '^/md/': '' },
+    },
+  } as Record<string, any>
+}
+
 export default defineNuxtConfig({
   modules: [
     '@vant/nuxt',
@@ -16,7 +57,13 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE,
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://192.168.232.180:51000',
+      obsBase: process.env.NUXT_PUBLIC_OBS_BASE || 'http://192.168.232.180:51000',
+      mdBase: process.env.NUXT_PUBLIC_MD_BASE || 'http://192.168.232.180:51000',
+      mockEnabled: process.env.NUXT_MOCK_ENABLED === 'true',
+      cdnHost: process.env.NUXT_PUBLIC_CDN_HOST || '',
+      appName: process.env.NUXT_PUBLIC_APP_NAME || 'nuxt-vant-mobile',
+      appVersion: process.env.NUXT_PUBLIC_APP_VERSION || '0.6.0',
     },
   },
 
@@ -89,9 +136,22 @@ export default defineNuxtConfig({
     },
   },
 
+  // Vite配置
   vite: {
+    server: {
+      proxy: getProxyConfig(),
+    },
     build: {
       target: 'esnext',
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vue-vendor': ['vue', 'vue-router'],
+            'vant-vendor': ['vant'],
+            'pinia-vendor': ['pinia'],
+          },
+        },
+      },
     },
     optimizeDeps: {
       include: [
@@ -100,6 +160,15 @@ export default defineNuxtConfig({
         '@vue/devtools-core',
         '@vue/devtools-kit',
       ],
+    },
+  },
+
+  // Nitro构建配置
+  nitro: {
+    minify: process.env.NITRO_MINIFY === 'true',
+    prerender: {
+      crawlLinks: false,
+      routes: ['/'],
     },
   },
 

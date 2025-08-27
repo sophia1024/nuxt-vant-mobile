@@ -40,6 +40,7 @@ const menus = computed(() => [
   { title: t('menu.keepAlive'), route: 'keepalive' },
   { title: t('menu.persistPiniaState'), route: 'counter' },
   { title: t('menu.fetch'), route: 'prose' },
+  { title: '🔐 登录测试', route: 'login' },
   { title: t('menu.404Demo'), route: 'unknown' },
 ])
 

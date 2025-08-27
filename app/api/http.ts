@@ -1,7 +1,10 @@
 import type { $Fetch } from 'ofetch'
-
 import { useRuntimeConfig } from '#app'
 import { ofetch } from 'ofetch'
+import { storeToRefs } from 'pinia'
+import { useLangStore } from '../../store/lang'
+import { useUserStore } from '../../store/userStore'
+import { aesEncode, isMobile, queryUrl } from '../utils/index'
 
 type HttpStatusErrorHandler = (message: string, statusCode: number) => void
 let httpStatusErrorHandler: HttpStatusErrorHandler
@@ -17,14 +20,28 @@ export function setupHttp() {
 
   http = ofetch.create({
     baseURL,
-    headers: { 'Content-Type': 'application/json' },
     async onRequest({ options }) {
-      const token = localStorage.getItem('token')
+      const userStore = useUserStore()
+      const langStore = useLangStore()
+      const { language } = storeToRefs(langStore)
+      const token = queryUrl('token')
+      const TOKEN = token || userStore.token
+      const brand = 'HiSMK'
+      const deviceId = isMobile() ? 'mobile' : 'pc'
+      const timestamp = new Date().getTime()
+      const signature = aesEncode(`appId=${brand};timestamp=${timestamp}`)
 
       options.headers = {
+        Authorization: TOKEN,
+        channel: 'mobile',
+        deviceId,
+        brand,
+        timestamp: timestamp.toString(),
+        signature,
+        appId: brand,
+        lang: language.value,
         ...options.headers,
-        ...(token && { Authorization: `Bearer ${token}` }),
-      }
+      } as any
     },
     async onResponseError({ response }) {
       const { message } = response._data
