@@ -1,11 +1,11 @@
 # Node.js 版本自动切换配置
 
-本项目已配置为使用 Node.js 20.19.0 版本，并支持自动版本切换。
+本项目已配置为使用 Node.js 22.12.0 版本，并支持自动版本切换。
 
 ## 配置文件
 
-- `.nvmrc` - 指定项目使用的 Node.js 版本 (20.19.0)
-- `package.json` - engines 字段要求 Node.js >=20.19.0
+- `.nvmrc` - 指定项目使用的 Node.js 版本 (22.12.0)
+- `package.json` - engines 字段要求 Node.js >=22.12.0
 - `.zshrc_nvm_config` - 自动切换 Node.js 版本的 zsh 配置
 
 ## 自动配置步骤
@@ -36,21 +36,21 @@ source ~/.zshrc
 ### 3. 安装并使用指定的 Node.js 版本
 
 ```bash
-# 安装 Node.js 20.19.0
-nvm install 20.19.0
+# 安装 Node.js 22.12.0
+nvm install 22.12.0
 
-# 使用 Node.js 20.19.0
-nvm use 20.19.0
+# 使用 Node.js 22.12.0
+nvm use 22.12.0
 
 # 设置为默认版本（可选）
-nvm alias default 20.19.0
+nvm alias default 22.12.0
 ```
 
 ## 工作原理
 
 配置完成后，当你：
 
-1. **进入项目目录** - 自动切换到 `.nvmrc` 指定的版本 (20.19.0)
+1. **进入项目目录** - 自动切换到 `.nvmrc` 指定的版本 (22.12.0)
 2. **离开项目目录** - 自动恢复到默认版本
 3. **在项目目录中打开新终端** - 自动使用正确版本
 
@@ -59,7 +59,7 @@ nvm alias default 20.19.0
 ```bash
 # 检查当前 Node.js 版本
 node --version
-# 应该输出: v20.19.0
+# 应该输出: v22.12.0
 
 # 检查 npm 版本
 npm --version
@@ -76,7 +76,7 @@ cd .. && cd nuxt-vant-mobile
 ```json
 {
   "typescript.preferences.includePackageJsonAutoImports": "off",
-  "typescript.nodejs.path": "~/.nvm/versions/node/v20.19.0/bin/node"
+  "typescript.nodejs.path": "~/.nvm/versions/node/v22.12.0/bin/node"
 }
 ```
 
